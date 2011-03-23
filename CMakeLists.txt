@@ -5,8 +5,6 @@ SET(CMAKE_BUILD_TYPE Release)
 
 # プロジェクト名
 PROJECT(read2ch C)
-SET(serial "1.0.0")
-SET(soserial "1")
 INCLUDE_DIRECTORIES(
 	"${PROJECT_SOURCE_DIR}"
 	/usr/local/include/
@@ -22,5 +20,4 @@ LINK_DIRECTORIES(
 # 実行ファイル
 ADD_EXECUTABLE(read2ch read.c)
 TARGET_LINK_LIBRARIES(read2ch un2ch pthread mysqlclient onig unmap unstring unarray)
-SET_TARGET_PROPERTIES(read2ch PROPERTIES VERSION ${serial} SOVERSION ${soserial})
 
