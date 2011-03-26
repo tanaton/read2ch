@@ -381,7 +381,7 @@ static void get_thread(un2ch_t *get, unarray_t *tl, int board_no, MYSQL *mysql)
 		} else {
 			printf("code:%ld OK %s/%s/%s\n", get->code, nich->server->data,
 					nich->board->data, nich->thread->data);
-			if(board_no >= 0){
+			if((board_no >= 0) && (mysql != NULL)){
 				nich->reg = reg;
 				nich->board_no = board_no;
 				set_mysql_res(data, moto, nich, mysql);
@@ -615,10 +615,13 @@ static unstr_t* create_date_query(const nich_t *nich, size_t res_no, const unstr
 
 static int get_board_no(nich_t *nich, MYSQL *mysql)
 {
-	int board_no = get_board_no_query(nich, mysql);
-	if(board_no < 0){
-		set_board_no_query(nich, mysql);
+	int board_no = -1;
+	if(mysql != NULL){
 		board_no = get_board_no_query(nich, mysql);
+		if(board_no < 0){
+			set_board_no_query(nich, mysql);
+			board_no = get_board_no_query(nich, mysql);
+		}
 	}
 	return board_no;
 }
