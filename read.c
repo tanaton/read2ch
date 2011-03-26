@@ -527,11 +527,8 @@ static void set_mysql_res(unstr_t *data, unstr_t *moto, nich_t *nich, MYSQL *mys
 {
 	size_t moto_len = 0;
 	size_t res_no = 0;
-	size_t *array = 0;
 	unstr_t *str = 0;
-	unstr_t *search = 0;
 	if(data == NULL) return;
-	search = unstr_init("\n");
 	if(moto == NULL){
 		str = unstr_copy(data);
 		set_mysql_res_query(str, nich, 0, mysql);
@@ -539,12 +536,11 @@ static void set_mysql_res(unstr_t *data, unstr_t *moto, nich_t *nich, MYSQL *mys
 		moto_len = unstr_strlen(moto);
 		if(unstr_strlen(data) > (moto_len + 1)){
 			str = unstr_init(&(data->data[moto_len]));
-			array = unstr_quick_search(moto, search, &res_no);
+			res_no = unstr_substr_count_char(moto, "\n");
 			set_mysql_res_query(str, nich, res_no, mysql);
 		}
 	}
-	free(array);
-	unstr_delete(2, str, search);
+	unstr_free(str);
 }
 
 static void set_mysql_res_query(unstr_t *data, nich_t *nich, size_t res_no, MYSQL *mysql)
