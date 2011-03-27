@@ -159,15 +159,13 @@ static unmap_t *get_board_data(unstr_t *path)
 	unmap_t *map = unmap_init(16);
 	unstr_t *line = 0;
 	unstr_t *data = unstr_file_get_contents(path);
-	line = unstr_strtok(data, "\n", &index);
-	while(line != NULL){
+	while((line = unstr_strtok(data, "\n", &index)) != NULL){
 		length = unstr_strlen(line);
 		if(length != 0){
 			unstr_free_func(unmap_find(map, line->data, length));
 			unmap_set(map, line->data, length, unstr_copy(line));
 		}
 		unstr_free(line);
-		line = unstr_strtok(data, "\n", &index);
 	}
 	unstr_delete(2, line, data);
 	return map;
@@ -196,8 +194,7 @@ static unmap_t *get_server(read2ch_config_t *conf)
 	hash = unmap_init(16);
 	server = unstr_init_memory(32);
 	board = unstr_init_memory(32);
-	line = unstr_strtok(bl, "\n", &index);
-	while(line != NULL){
+	while((line = unstr_strtok(bl, "\n", &index)) != NULL){
 		if(unstr_sscanf(line, "$/$<>", server, board) == 2){
 			switch(conf->type){
 			case READ2CH_NORMAL:
@@ -216,7 +213,6 @@ static unmap_t *get_server(read2ch_config_t *conf)
 			}
 		}
 		unstr_free(line);
-		line = unstr_strtok(bl, "\n", &index);
 	}
 	unstr_delete(4, bl, line, server, board);
 	unmap_free(board_map, (void (*)(void *))unstr_free_func);
@@ -275,8 +271,7 @@ static unarray_t *get_board(un2ch_t *get, nich_t *nich)
 		printf("ita error\n");
 		return NULL;
 	}
-	line = unstr_strtok(data, "\n", &index);
-	while(line != NULL){
+	while((line = unstr_strtok(data, "\n", &index)) != NULL){
 		if(unstr_sscanf(line, "$.dat<>$", p1, p2) == 2){
 			n = unmalloc(sizeof(nich_t));
 			n->server = unstr_copy(nich->server);
@@ -300,7 +295,6 @@ static unarray_t *get_board(un2ch_t *get, nich_t *nich)
 			}
 		}
 		unstr_free(line);
-		line = unstr_strtok(data, "\n", &index);
 	}
 	unstr_delete(5, data, p1, p2, line, filename);
 	unmap_free(resmap, free);
@@ -328,8 +322,7 @@ static unmap_t *get_board_res(unstr_t *filename)
 	p1 = unstr_init_memory(32);
 	p2 = unstr_init_memory(128);
 	
-	line = unstr_strtok(data, "\n", &index);
-	while(line != NULL){
+	while((line = unstr_strtok(data, "\n", &index)) != NULL){
 		if(unstr_sscanf(line, "$.dat<>$", p1, p2) == 2){
 			p = strrchr(p2->data, ' ');
 			if(p != NULL){
@@ -340,7 +333,6 @@ static unmap_t *get_board_res(unstr_t *filename)
 			}
 		}
 		unstr_free(line);
-		line = unstr_strtok(data, "\n", &index);
 	}
 	unstr_delete(4, data, p1, p2, line);
 	return resmap;
@@ -486,8 +478,7 @@ static void get_mysql_config(mysql_config_t *m, unstr_t *path)
 	m->port = 0;
 	m->client_flag = 0;
 
-	line = unstr_strtok(data, "\n", &index);
-	while(line != NULL){
+	while((line = unstr_strtok(data, "\n", &index)) != NULL){
 		if(unstr_sscanf(line, "$=$", p1, p2) == 2){
 			if(unstr_strcmp_char(p1, "host") == 0){
 				m->host = unstr_copy(p2);
@@ -506,7 +497,6 @@ static void get_mysql_config(mysql_config_t *m, unstr_t *path)
 			}
 		}
 		unstr_free(line);
-		line = unstr_strtok(data, "\n", &index);
 	}
 	unstr_delete(4, data, p1, p2, line);
 }
@@ -552,15 +542,13 @@ static void set_mysql_res_query(unstr_t *data, nich_t *nich, size_t res_no, MYSQ
 	size_t index = 0;
 	size_t i = 0;
 
-	line = unstr_strtok(data, "\n", &index);
-	while(line != NULL){
+	while((line = unstr_strtok(data, "\n", &index)) != NULL){
 		res_no++;
 		tmp_query = create_date_query(nich, res_no, line);
 		if(tmp_query != NULL){
 			unarray_push(list, tmp_query);
 		}
 		unstr_free(line);
-		line = unstr_strtok(data, "\n", &index);
 	}
 	if(list->length > 0){
 		unstr_strcat(query, unarray_at(list, 0));
