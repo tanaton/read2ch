@@ -156,7 +156,7 @@ static unmap_t *get_board_data(unstr_t *path)
 {
 	size_t index = 0;
 	size_t length = 0;
-	unmap_t *map = unmap_init(16);
+	unmap_t *map = unmap_init();
 	unstr_t *line = 0;
 	unstr_t *data = unstr_file_get_contents(path);
 	while((line = unstr_strtok(data, "\n", &index)) != NULL){
@@ -191,7 +191,7 @@ static unmap_t *get_server(read2ch_config_t *conf)
 		perror("板一覧ファイルが無いよ。\n");
 	}
 	board_map = get_board_data(conf->favolist_path);
-	hash = unmap_init(16);
+	hash = unmap_init();
 	server = unstr_init_memory(32);
 	board = unstr_init_memory(32);
 	while((line = unstr_strtok(bl, "\n", &index)) != NULL){
@@ -318,7 +318,7 @@ static unmap_t *get_board_res(unstr_t *filename)
 	if(unstr_empty(data)){
 		return NULL;
 	}
-	resmap = unmap_init(16);
+	resmap = unmap_init();
 	p1 = unstr_init_memory(32);
 	p2 = unstr_init_memory(128);
 	
