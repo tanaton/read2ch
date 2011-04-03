@@ -614,8 +614,8 @@ static int get_board_no_query(nich_t *nich, MYSQL *mysql)
 {
 	MYSQL_RES *res;
 	MYSQL_ROW row;
-	unstr_t *query = unstr_sprintf(NULL, "SELECT id, board FROM boardlist WHERE board = '%$'", nich->board);
 	int board_no = -1;
+	unstr_t *query = unstr_sprintf(NULL, "SELECT id, board FROM boardlist WHERE board = '%$'", nich->board);
 	if(!mysql_query(mysql, query->data)){
 		res = mysql_use_result(mysql);
 		if((row = mysql_fetch_row(res)) != NULL){
