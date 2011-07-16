@@ -35,7 +35,7 @@ static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t g_onig_mutex = PTHREAD_MUTEX_INITIALIZER;
 static bool g_stop_flag = false;
 static read2ch_config_t g_conf;
-static char *g_pattern = "^.*?<>.*?<>.*?(\\d{4})\\/(\\d{2})\\/(\\d{2}).*(\\d{2}):(\\d{2}):(\\d{2})";
+static char *g_pattern = "^.*?<>.*?<>.*?(\\d{4})\\/(\\d{2})\\/(\\d{2}).*?(\\d{2}):(\\d{2}):(\\d{2})";
 
 int main(int argc, char *argv[])
 {
